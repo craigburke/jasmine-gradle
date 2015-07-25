@@ -41,7 +41,7 @@ The plugin adds the following tasks to your build:
 
 == Configuration
 
-You can use the same properties you'd set in your http://bower.io/docs/creating-packages/#bowerjson[bower.json file] directly in *build.gradle*
+You can use the same properties you'd set in your http://karma-runner.github.io/0.8/config/configuration-file.html[karma.config.js file] directly in *build.gradle*
 
 [source,gradle,subs='attributes']
 ----
@@ -58,7 +58,7 @@ plugins {
 apply plugin: 'com.craigburke.jasmine'
 
 jasmine {
-    basePath = '' <1>
+    basePath = 'src/assets' <1>
     files = [ // <2>
         'libs/bower/angular/angular.js',
         'libs/bower/**/*.js',
