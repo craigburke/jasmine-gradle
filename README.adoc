@@ -35,7 +35,7 @@ The plugin adds the following tasks to your build:
 
 | jasmineWatch | Runs your jasmine tests in watch mode
 
-| jasmineClean | Runs your jasmine tests in watch mode
+| jasmineClean | Removes generated karma config file
 
 |===
 
