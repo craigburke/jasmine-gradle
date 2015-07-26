@@ -12,7 +12,7 @@ NOTE: You need to have the https://github.com/srs/gradle-node-plugin[Node Gradle
 ----
 plugins {
     id 'com.moowork.node' version '0.10'
-    id 'com.craigburke.jasmine' version '{version}
+    id 'com.craigburke.jasmine' version '{version}'
 }
 ----
 
@@ -40,7 +40,7 @@ You can use the same properties you'd set in your http://karma-runner.github.io/
 ----
 plugins {
     id 'com.moowork.node' version '0.10'
-    id 'com.craigburke.jasmine' version '{version}
+    id 'com.craigburke.jasmine' version '{version}'
 }
 
 jasmine {
