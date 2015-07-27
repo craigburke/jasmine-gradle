@@ -1,4 +1,4 @@
-:version: 1.0.0
+:version: 1.0.1
 
 = Jasmine Gradle Plugin
 
@@ -85,4 +85,4 @@ jasmine {
     ]
 }
 ----
-<2> *additional* is a map that allows additional properties to be added to Karma's configuration.
+<1> *additional* is a map that allows additional properties to be added to Karma's configuration.

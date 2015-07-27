@@ -1,10 +1,8 @@
 plugins {
-    id 'com.jfrog.bintray' version '1.2'
+    id 'com.gradle.plugin-publish' version '0.9.1'
+    id 'groovy'
+    id 'maven-publish'
 }
-
-apply plugin: 'idea'
-apply plugin: 'groovy'
-apply plugin: 'maven-publish'
 
 targetCompatibility = 1.6
 
@@ -15,15 +13,10 @@ repositories {
 }
 
 group = 'com.craigburke.gradle'
-version = '1.0.0'
+version = '1.0.1'
 
 ext {
     artifactId = 'jasmine'
-    description = 'Jasmine Test Gradle Plugin'
-    license = [
-            name: 'Mozilla Public License, Version 2.0',
-            url : 'https://www.mozilla.org/MPL/2.0/'
-    ]
 }
 
 configurations {
@@ -33,7 +26,7 @@ configurations {
 
 dependencies {
     compile gradleApi()
-    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    compile 'org.codehaus.groovy:groovy-all:2.3.10'
     provided 'com.moowork.gradle:gradle-node-plugin:0.10'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
@@ -44,67 +37,28 @@ sourceSets {
     }
 }
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from 'build/docs/javadoc'
-}
-
-bintray {
-    user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : ''
-    key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : ''
-    publications = ['maven']
-
-    pkg {
-        repo = 'gradle'
-        userOrg = 'craigburke'
-        name = project.artifactId
-    }
-}
-
 publishing {
     publications {
         maven(MavenPublication) {
             artifactId project.artifactId
-            pom.withXml {
-                asNode().children().last() + {
-                    resolveStrategy = Closure.DELEGATE_FIRST
-                    name project.artifactId
-                    description project.description
-                    url 'https://github.com/craigburke/jasmine-gradle'
-                    scm {
-                        url 'https://github.com/craigburke/jasmine-gradle'
-                        connection 'scm:https://github.com/craigburke/jasmine-gradle'
-                        developerConnection 'scm:https://github.com/craigburke/jasmine-gradle'
-                    }
-                    licenses {
-                        license {
-                            name project.license.name
-                            url project.license.url
-                            distribution 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id 'craigburke'
-                            name 'Craig Burke'
-                            email 'craig@craigburke.com'
-                        }
-                    }
-                }
-            }
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
         }
     }
 }
 
-bintrayUpload.dependsOn build, sourcesJar, javadoc
+pluginBundle {
+    website = 'https://github.com/craigburke/jasmine-gradle'
+    vcsUrl = 'https://github.com/craigburke/jasmine-gradle'
+    description = 'allows you to run Jasmine tests using Karma'
+    tags = ['jasmine', 'karma']
+
+    plugins {
+        jasmine {
+            id = 'com.craigburke.jasmine'
+            displayName = 'Jasmine Test Plugin'
+        }
+    }
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
