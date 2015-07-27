@@ -71,8 +71,4 @@ jasmine {
     ]
 }
 ----
-<<<<<<< HEAD
 <1> *additional* is a map that allows additional properties to be added to Karma's configuration.
-=======
-<2> *additional* is a map that allows additional properties to be added to Karma's configuration.
->>>>>>> d61a60387e78699452c8857470d42d9d85aa8307
