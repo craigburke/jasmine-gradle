@@ -10,17 +10,10 @@ NOTE: You need to have the https://github.com/srs/gradle-node-plugin[Node Gradle
 
 [source,gradle,subs='attributes']
 ----
-buildscript {
-    dependencies {
-        classpath "com.craigburke.gradle:jasmine:{version}"
-    }
-}
-
 plugins {
     id 'com.moowork.node' version '0.10'
+    id 'com.craigburke.jasmine' version '{version}'
 }
-
-apply plugin: 'com.craigburke.jasmine'
 ----
 
 == Tasks
@@ -45,17 +38,10 @@ You can use the same properties you'd set in your http://karma-runner.github.io/
 
 [source,gradle,subs='attributes']
 ----
-buildscript {
-    dependencies {
-        classpath "com.craigburke.gradle:jasmine:{version}"
-    }
-}
-
 plugins {
     id 'com.moowork.node' version '0.10'
+    id 'com.craigburke.jasmine' version '{version}'
 }
-
-apply plugin: 'com.craigburke.jasmine'
 
 jasmine {
     basePath = 'src/assets' <1>
@@ -85,4 +71,8 @@ jasmine {
     ]
 }
 ----
+<<<<<<< HEAD
 <1> *additional* is a map that allows additional properties to be added to Karma's configuration.
+=======
+<2> *additional* is a map that allows additional properties to be added to Karma's configuration.
+>>>>>>> d61a60387e78699452c8857470d42d9d85aa8307
