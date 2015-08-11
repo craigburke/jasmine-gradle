@@ -11,7 +11,7 @@ import org.gradle.api.tasks.Delete
 class JasminePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        project.apply NodePlugin
+        project.plugins.apply NodePlugin
         def nodeConfig = project.extensions.findByName('node')
 
         final String NPM_OUTPUT_PATH = project.file(nodeConfig.nodeModulesDir).absolutePath.replace(File.separator, '/') + '/node_modules/'
