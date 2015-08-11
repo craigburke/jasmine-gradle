@@ -21,7 +21,7 @@ class JasminePlugin implements Plugin<Project> {
         def jasmineConfig = project.extensions.create('jasmine', JasmineModuleExtension)
 
         boolean grailsPluginApplied = project.extensions.findByName('grails')
-        jasmineConfig.basePath = grailsPluginApplied ? '../grails-app/assets/libs/' : '../src/assets/'
+        jasmineConfig.basePath = grailsPluginApplied ? 'grails-app/assets/' : 'src/assets/'
 
         Task jasmineDependencies = project.task('jasmineDependencies',
                 type: NpmTask,

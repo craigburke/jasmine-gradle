@@ -14,7 +14,7 @@ class JasmineModuleExtension {
     Map additional = [:]
     
     String getConfigJavaScript() {
-        Map properties = [basePath: basePath, files: files, browsers: browsers,
+        Map properties = [basePath: "../${basePath}", files: files, browsers: browsers,
                           frameworks: frameworks, excludes: excludes ]
 
         additional.each{ properties[it.key] = it.value }
