@@ -1,17 +1,14 @@
-:version: 1.0.1
+:version: 1.1.0
 
 = Jasmine Gradle Plugin
 
 This Gradle plugin allows you to run Jasmine tests using Karma from your build.
-
-NOTE: You need to have the https://github.com/srs/gradle-node-plugin[Node Gradle plugin] applied in order to use this.
 
 == Getting Started
 
 [source,gradle,subs='attributes']
 ----
 plugins {
-    id 'com.moowork.node' version '0.10'
     id 'com.craigburke.jasmine' version '{version}'
 }
 ----
@@ -39,7 +36,6 @@ You can use the same properties you'd set in your http://karma-runner.github.io/
 [source,gradle,subs='attributes']
 ----
 plugins {
-    id 'com.moowork.node' version '0.10'
     id 'com.craigburke.jasmine' version '{version}'
 }
 

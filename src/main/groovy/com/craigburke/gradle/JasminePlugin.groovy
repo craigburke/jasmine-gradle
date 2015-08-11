@@ -1,8 +1,8 @@
 package com.craigburke.gradle
 
+import com.moowork.gradle.node.NodePlugin
 import com.moowork.gradle.node.task.NodeTask
 import com.moowork.gradle.node.task.NpmTask
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -11,13 +11,10 @@ import org.gradle.api.tasks.Delete
 class JasminePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        
+        project.apply NodePlugin
         def nodeConfig = project.extensions.findByName('node')
-        if (!nodeConfig) {
-            throw new GradleException('The Node plugin needs to be installed and applied.')
-        }
 
-        final String NPM_OUTPUT_PATH = project.file(nodeConfig.nodeModulesDir).absolutePath + '/node_modules/'
+        final String NPM_OUTPUT_PATH = project.file(nodeConfig.nodeModulesDir).absolutePath.replace(File.separator, '/') + '/node_modules/'
         final File KARMA_EXEC = project.file(NPM_OUTPUT_PATH + '/karma/bin/karma')
         final File KARMA_CONFIG = project.file("${project.buildDir.absolutePath}/karma.conf.js")
         
