@@ -6,7 +6,6 @@ import com.moowork.gradle.node.task.NodeTask
 import com.moowork.gradle.node.task.NpmTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.tasks.Delete
 
 class JasminePlugin implements Plugin<Project> {
@@ -21,49 +20,57 @@ class JasminePlugin implements Plugin<Project> {
         final File KARMA_CONFIG = project.file("${project.buildDir.absolutePath}/karma.conf.js")
         
         def jasmineConfig = project.extensions.create('jasmine', JasmineModuleExtension)
-
+        
         boolean grailsPluginApplied = project.extensions.findByName('grails')
         jasmineConfig.basePath = grailsPluginApplied ? 'grails-app/assets/' : 'src/assets/'
 
-        Task jasmineDependencies = project.task('jasmineDependencies',
-                type: NpmTask,
-                group: 'Jasmine',
-                description: 'Installs dependencies needed for running Jasmine tests.')
-
-        jasmineDependencies.configure {
-            args = ['install'] + jasmineConfig.dependencies + ['--silent']
-            outputs.files jasmineConfig.dependencies.collect { "${NPM_OUTPUT_PATH}/${it.split('@')[0]}" } + KARMA_CONFIG
-        }
-        jasmineDependencies.doLast {
+        def generateKarmaConfig = {
             KARMA_CONFIG.parentFile.mkdirs()
             KARMA_CONFIG.text = jasmineConfig.configJavaScript
         }
-
-        Task jasmineRun = project.task('jasmineRun',
-                 type: NodeTask, dependsOn: 'jasmineDependencies', group: 'Jasmine',
-                 description: 'Executes jasmine tests')
         
-        jasmineRun.configure {
+        project.task('jasmineDependencies', type: NpmTask, description: 'Installs dependencies needed for running Jasmine tests.')  {
+            args = ['install'] + jasmineConfig.dependencies + ['--silent']
+            
+            outputs.files getDependencyPaths(NPM_OUTPUT_PATH, jasmineConfig.dependencies)
+        }
+
+        project.task('jasmineRefresh', group: 'Jasmine',
+                description: 'Refreshes the generated karma config file') {
+            doLast {
+                generateKarmaConfig()
+            }
+        }
+        
+        project.task('jasmineGenerateConfig', description: 'Generates the karma config file', ) {
+            outputs.file KARMA_CONFIG
+            doLast {
+                generateKarmaConfig()
+            }
+        }
+        
+        project.task('jasmineRun', type: NodeTask, dependsOn: ['jasmineDependencies', 'jasmineGenerateConfig'], group: 'Jasmine',
+                 description: 'Executes jasmine tests') {
             script = KARMA_EXEC
             args = ['start', KARMA_CONFIG.absolutePath, '--single-run']
         }
 
-        Task jasmineWatch = project.task('jasmineWatch',
-                type: NodeTask, dependsOn: 'jasmineDependencies', group: 'Jasmine',
-                description: 'Executes jasmine tests in watch mode')
-
-        jasmineWatch.configure {
+        project.task('jasmineWatch', type: NodeTask, dependsOn: ['jasmineDependencies', 'jasmineGenerateConfig'], group: 'Jasmine',
+                description: 'Executes jasmine tests in watch mode') {
             script = KARMA_EXEC
             args = ['start', KARMA_CONFIG.absolutePath, '--auto-watch']
         }
 
-        Task jasmineClean = project.task('jasmineClean',
-                type: Delete, group: 'Jasmine',
-                description: 'Deletes the generated karma config file')
-        jasmineClean.configure {
+        project.task('jasmineClean', type: Delete, group: 'Jasmine',
+                description: 'Deletes the generated karma config file and removes the node dependencies') {
             delete KARMA_CONFIG
+            delete getDependencyPaths(NPM_OUTPUT_PATH, jasmineConfig.dependencies)
         }
-
     }
+    
+    String[] getDependencyPaths(String npmPath, dependencies) {
+        dependencies.collect { "${npmPath}/${it.split('@')[0]}" }
+    }
+    
 
 }
